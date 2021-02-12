@@ -48,7 +48,7 @@
         <div class="alert alert-danger">test</div> -->
 
 
-        <h1>Bienvenue sur notre site <?php if(isset($user)){echo $user['username'];}?></h1>
+        <h1>Bienvenue sur notre site <?php if(isset($_SESSION['user'])){echo $_SESSION['user']['username'];}?></h1>
         <?php if($_SESSION['user'] != null): ?>
             <form action="" method="POST">
                 <input type="submit" name="deconnexion" class="btn btn-danger" value="Se deconnecter">
@@ -60,38 +60,56 @@
                 $personnes = $selectUserPersonne->fetchAll();
                 // var_dump($personnes);
             ?>
-                <table class="table table-bordered">
-                    <tr>
-                        <th>N°</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>Sexe</th>
-                        <th>Actions</th>
-                    </tr>
-                    <?php $numero = 0;  ?>
-                   
-                    <?php foreach($personnes as $personne): ?>
-                        <?php $numero += 1;  ?>
+            <div class="row">
+                <div class="col-md-9">
+                    <table class="table table-bordered table-sm">
                         <tr>
-                            <td>
-                                <?= $numero;?>
-                            </td>
-                            <td>
-                                <?= $personne['nom'];?>
-                            </td>
-                            <td>
-                                <?= $personne['prenom'];?>
-                            </td>
-                            <td>
-                                <?= $personne['sexe'] == 1 ? 'Homme' : 'Femme';?>
-                            </td>
-                            <td width ="16%">
-                                <a href="supprimerPersonne.php?id=<?= $personne['id'];?>"" class="btn btn-danger btn-sm">Supprimer</a>
-                                <a href="modifierPersonne.php?id=<?= $personne['id'];?>" class="btn btn-success btn-sm">Modifier</a>
-                            </td>
+                            <th width="2%">N°</th>
+                            <th width="">Nom & Prenom</th>
+                            <th width="5%">Sexe</th>
+                            <th width="">Contacts</th>
+                            <th width="12%">Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </table>
+                        <?php $numero = 0;  ?>
+                        
+                        <?php foreach($personnes as $personne): ?>
+                            <?php $numero += 1;  ?>
+                            <tr>
+                                <td style="vertical-align: middle"><?= $numero;?></td>
+                                <td style="vertical-align: middle"><?= $personne['nom'].' '.$personne['prenom'];?></td>
+                                <td style="vertical-align: middle"><?= $personne['sexe'] == 1 ? 'M' : 'F';?></td>
+                                <td>
+                                    <?php
+                                        $selectContact = $bdd->prepare("SELECT * FROM  contact WHERE personne_id = :personneId AND created_by = :userId AND is_deleted = :deleted");
+                                        $selectContact->execute(array("userId" => $user['id'], "deleted" => false, "personneId" => $personne['id']));
+                                        $contacts = $selectContact->fetchAll();
+                                    ?>
+                                    <?php foreach($contacts as $contact): ?>
+                                        <li title="">
+                                            <?= $contact['contact'] ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </td>
+                                <td>
+                                    <a href="supprimerPersonne.php?id=<?= $personne['id'];?>"" class="btn btn-danger btn-sm" title="Supprimer">S</a>
+                                    <a href="modifierPersonne.php?id=<?= $personne['id'];?>" class="btn btn-success btn-sm" title="Modifier">M</a>
+                                    <a href="addContact.php?id=<?= $personne['id'];?>" class="btn btn-info btn-sm" title="Ajouter un contact">+</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Nom & prénom</h5>
+                            <p class="card-text">RAS</p>
+                            <a href="#" class="btn btn-primary">Edition</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <?php else:  ?>
             <a href="connexion.php" class="btn btn-primary">Se connecter</a>
             <article  style="margin-top: 50px;">

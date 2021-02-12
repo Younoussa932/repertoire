@@ -1,3 +1,3 @@
 <?php
-    $bdd=new PDO('mysql:host=localhost;dbname=test_repertoire','root','');
+    $bdd = new PDO('mysql:host=localhost:3306;dbname=repertoire','phpmyadmin','root');
 ?>

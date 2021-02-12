@@ -1,7 +1,7 @@
 <?php 
     session_start();
     require 'connect.inc.php';
-    $message = $_SESSION['message'];
+    $message = isset($_SESSION['message']) ? $_SESSION['message'] : null;
     if(isset($_POST["connexion"])){
         $password = $_POST["password"];
         $username = $_POST["username"];

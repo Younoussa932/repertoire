@@ -8,7 +8,6 @@
         $_SESSION['message'] = "Desole vous n'est pas connecté !";
         header("Location:index.php");
     }
-    $bdd=new PDO('mysql:host=localhost;dbname=test_repertoire','root','');
     if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['sexe'])){
         $nom=$_POST['nom'];
         $prenom=$_POST['prenom'];

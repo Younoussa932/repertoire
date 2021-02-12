@@ -60,7 +60,7 @@ include("menu.php");
 <div class="container">
     <h1 style="text-align : center;">Modificatoin de <?= $personne['nom'], ' '.$personne['prenom'];?> </h1>
     <form action="" method="POST">
-        <div class="row m-5">
+        <div class="row">
             <div class="col-md-4">
                 <label for="nom">Nom:</label>
                 <input type="text" id="" name="nom" value="<?= $personne['nom'];?>" placeholder="Votre Nom" required="required" class="form-control">
@@ -78,11 +78,13 @@ include("menu.php");
                 </select>
             </div>
         </div>
-        <div class="row">
-            <input class="btn btn-primary" type="submit" value="Modifier">
-        </div>   
-        <div class="row mt-2 mb-5"> 
-            <input class="btn btn-info mb-5 " type="reset" value="Réinitialiser">
+        <div class="row mt-3">
+            <div class="col-1">
+                <input class="btn btn-primary" type="submit" value="Modifier">&nbsp;
+            </div>
+            <div class="col-1">
+                <input class="btn btn-info mb-5 " type="reset" value="Réinitialiser">
+            </div>
         </div>
     </form>
 </div>
