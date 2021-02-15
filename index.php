@@ -48,7 +48,7 @@
         <div class="alert alert-danger">test</div> -->
 
 
-        <h1>Bienvenue sur notre site <?php if(isset($user)){echo $user['username'];}?></h1>
+        <h1>Bienvenue sur notre site <strong style="color:blue;"><?php if(isset($user)){echo $user['username'];}?></strong></h1>
         <?php if($_SESSION['user'] != null): ?>
             <form action="" method="POST">
                 <input type="submit" name="deconnexion" class="btn btn-danger" value="Se deconnecter">
@@ -60,12 +60,13 @@
                 $personnes = $selectUserPersonne->fetchAll();
                 // var_dump($personnes);
             ?>
-                <table class="table table-bordered">
+                <table class="table table-bordered mt-4">
                     <tr>
                         <th>N°</th>
                         <th>Nom</th>
                         <th>Prenom</th>
                         <th>Sexe</th>
+                        <th>Contacts</th>
                         <th>Actions</th>
                     </tr>
                     <?php $numero = 0;  ?>
@@ -85,9 +86,22 @@
                             <td>
                                 <?= $personne['sexe'] == 1 ? 'Homme' : 'Femme';?>
                             </td>
-                            <td width ="16%">
+                                <?php
+                                    $selectcontact = $bdd->prepare("SELECT contact.contact FROM  contact JOIN personne WHERE personne.id = contact.personne_id AND personne.id = :personneId AND contact.is_deleted = :deleted");
+                                    $selectcontact->execute(array("personneId" => $personne['id'], "deleted" => false));
+                                    $contacts = $selectcontact->fetchAll();
+                                    // var_dump($contacts);
+
+                                ?>  
+                            <td>
+                                <?php  foreach( $contacts as $contact): ?>
+                                    <li><?= $contact['contact'];?></li>
+                                <?php endforeach; ?>
+                            </td>
+                            <td width ="24%">
                                 <a href="supprimerPersonne.php?id=<?= $personne['id'];?>"" class="btn btn-danger btn-sm">Supprimer</a>
                                 <a href="modifierPersonne.php?id=<?= $personne['id'];?>" class="btn btn-success btn-sm">Modifier</a>
+                                <a href="ajouterContact.php?id=<?= $personne['id'];?>" class="btn btn-info btn-sm">+ Contact</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -118,12 +132,13 @@
                     </li>    
                 </ul>
             </section>
+        </div>
+            <div class="clear"></div>
+            <footer>
+                <h1>Super Repertoire<span class="orange">.</span></h1>
+                <div class="copyright">Copyright &copy; 2021 | Tous droits réservés.</div>
+            </footer>
         <?php endif;  ?>
-
-        <div class="clear"></div>
-    </div>
-    <?php
-        include("footer.php")
-    ?>
+ 
 </body>
 </html>
