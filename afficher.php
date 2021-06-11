@@ -41,71 +41,48 @@
                 echo '<div class="alert alert-'.$type.'">'.$_SESSION['message'].'</div>'; 
                 $_SESSION['message'] = null; 
             }
+            // var_dump($personnes);
+        ?>
+
+        <?php
+        $selectPersonne = $bdd->prepare("SELECT * FROM personne WHERE id = :personneId AND created_by = :userId");
+        $selectPersonne->execute(['personneId' => $_GET['id'], "userId" => $user['id']]);
+        $personne = $selectPersonne->fetch();
         ?>
         <!-- <div class="alert alert-success">test</div>
         <div class="alert alert-info">test</div>
         <div class="alert alert-warning">test</div>
         <div class="alert alert-danger">test</div> -->
-
-
-        <h1>Bienvenue sur notre site <strong style="color:blue;"><?php if(isset($user)){echo $user['username'];}?></strong></h1>
+        
+        <h1>Detail sur <strong style="color:blue;"><?= $personne['nom']. ' '.$personne['prenom'];?></strong></h1>
         <?php if($_SESSION['user'] != null): ?>
-            <form action="" method="POST">
+            <a href="supprimerPersonne.php?id=<?= $personne['id'];?>"" class="btn btn-danger btn-sm">Supprimer</a>
+            <a href="modifierPersonne.php?id=<?= $personne['id'];?>" class="btn btn-success btn-sm">Modifier</a>
+            <a href="ajouterContact.php?id=<?= $personne['id'];?>" class="btn btn-info btn-sm">+ Contact</a>
+            <!-- <form action="" method="POST">
                 <input type="submit" name="deconnexion" class="btn btn-danger" value="Se deconnecter">
                 <a href="personne.php" class="btn btn-primary">Enregistrer un contact</a>
-            </form>
-            <?php
-                $selectUserPersonne = $bdd->prepare("SELECT * FROM  personne WHERE created_by = :userId AND is_deleted = :deleted");
-                $selectUserPersonne->execute(array("userId" => $user['id'], "deleted" => false));
-                $personnes = $selectUserPersonne->fetchAll();
-                // var_dump($personnes);
-            ?>
-                <table class="table table-sm table-hover mt-4">
+            </form> -->
+                <?php
+                    $selectcontact = $bdd->prepare("SELECT contact.id, contact.contact, type_contact.libelle FROM  contact JOIN type_contact WHERE type_contact.id = contact.type_contact_id AND contact.personne_id = :personneId AND contact.is_deleted = :deleted");
+                    $selectcontact->execute(array("personneId" => $personne['id'], "deleted" => false));
+                    $contacts = $selectcontact->fetchAll();
+                        // var_dump($contacts);
+                ?>  
+                <table class="table table-bordered mt-4">
                     <tr>
-                        <th>N°</th>
-                        <th>Photo</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>Sexe</th>
+                        <th>Type de contact</th>
                         <th>Contacts</th>
                         <th>Actions</th>
                     </tr>
                     <?php $numero = 0;  ?>
-                    <?php foreach($personnes as $personne): ?>
-                        <?php $numero += 1;  ?>
+                    <?php foreach($contacts as $contact): ?>
                         <tr>
-                            <td>
-                                <?= $numero;?>
-                            </td>
-                            <td>
-                            <img src="images/<?= $personne["image"] ?>" style="width: 50px; height: auto" alt="">
-                            
-                            </td>
-                            <td>
-                                <?= $personne['nom'];?>
-                            </td>
-                            <td>
-                                <?= $personne['prenom'];?>
-                            </td>
-                            <td>
-                                <?= $personne['sexe'] == 1 ? 'Homme' : 'Femme';?>
-                            </td>
-                                <?php
-                                    $selectcontact = $bdd->prepare("SELECT contact.contact FROM  contact JOIN personne WHERE personne.id = contact.personne_id AND personne.id = :personneId AND contact.is_deleted = :deleted");
-                                    $selectcontact->execute(array("personneId" => $personne['id'], "deleted" => false));
-                                    $contacts = $selectcontact->fetchAll();
-                                    // var_dump($contacts);
-
-                                ?>  
-                            <td>
-                                <?php  foreach( $contacts as $contact): ?>
-                                    <li><?= $contact['contact'];?></li>
-                                <?php endforeach; ?>
-                            </td>
-                            <td width ="5%">
-                                <!-- <a href="supprimerPersonne.php?id=<?= $personne['id'];?>"" class="btn btn-danger btn-sm">Supprimer</a> -->
-                                <!-- <a href="modifierPersonne.php?id=<?= $personne['id'];?>" class="btn btn-success btn-sm">Modifier</a> -->
-                                <a href="afficher.php?id=<?= $personne['id'];?>" class="btn btn-info btn-sm">Voir +</a>
+                            <td><?= $contact['libelle'];?></td>
+                            <td><?= $contact['contact'];?></td>
+                            <td width ="20%"> 
+                                <a href="supprimerPersonne.php?id=<?= $personne['id'];?>"" class="btn btn-danger btn-sm">Supprimer</a>
+                                <a href="modifierContact.php?id=<?= $contact['id'];?>" class="btn btn-success btn-sm">Modifier</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

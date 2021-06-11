@@ -1,8 +1,4 @@
 /* GENERAL */
-html{
-    position: relative;
-    min-height: 100%;
-}
 p{
     line-height: 20px;
     color: #777;
@@ -110,8 +106,6 @@ footer{
     background-color:#444;
     color: #000;
     text-align: center;
-    bottom: 0;
-    position: absolute;
 }
 footer h1{
     color: #fff;

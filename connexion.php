@@ -4,6 +4,7 @@
     $message = $_SESSION['message'];
     if(isset($_POST["connexion"])){
         $password = $_POST["password"];
+        // $password = md5($password);
         $username = $_POST["username"];
         $insertuser = $bdd->prepare("SELECT * FROM  user WHERE username = :username AND password = :password");
         $insertuser->execute(array("username" => $username, "password" => $password));
@@ -69,7 +70,7 @@
         </form>
     </div>
 <?php
-include("footer.php");
+    include("footer.php");
 ?>
 </body>
 </html>

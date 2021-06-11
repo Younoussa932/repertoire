@@ -14,8 +14,8 @@
     if (isset($_POST['Supprimer'])){
         $nom = $_POST['nom'];
         $prenom = $_POST['prenom'];
-        $deleted_by= $user['id'];
-        $deleted_at= date('Y-m-d H:i:s');
+        $deleted_by = $user['id'];
+        $deleted_at = date('Y-m-d H:i:s');
         $is_deleted = true;
         $supprimerPersonne= $bdd->prepare("UPDATE personne SET is_deleted = ?, deleted_at = ?, deleted_by = ? WHERE id = ?");
         // $insertpersonne = $bdd->prepare("UPDATE personne SET nom = :nom, prenom = , sexe, updated_by, updated_at) VALUES(?,?,?,?,?,?)");
@@ -26,6 +26,7 @@
         }
         else{
             $_SESSION["message"] = "Une erreur s'est produite lors de la suppression de ".$nom." ".$prenom;
+            $_SESSION["type_message"] = "danger";
         }
         header('Location:index.php');
     }  
@@ -40,7 +41,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/Style.css">
     <link rel="stylesheet" href="css/bootstrap.css">
-    <title>Personne</title>
+    <title>supprimerPersonne</title>
 </head>
 <body>
 <h1 style="text-align: center;
@@ -57,16 +58,16 @@ include("menu.php");
 ?>
 
 <div class="container">
-    <h1 style="text-align : center;">Suppression de <?= $personne['nom'], ' '.$personne['prenom'];?> </h1>
+    <h1 style="text-align : center;">Suppression  de <?= $personne['nom'], ' '.$personne['prenom'];?> </h1>
     <form action="" method="POST">
         <div class="row m-5">
             <div class="col-md-4">
                 <label for="nom">Nom:</label>
-                <input type="text" id="" name="nom" value=" <?= $personne['nom'];?>" placeholder="Votre Nom" required="required" class="form-control">
+                <input type="text" id="nom" name="nom" value=" <?= $personne['nom'];?>" placeholder="Votre Nom" required="required" class="form-control">
             </div>
             <div class="col-md-4">
                 <label for="prenom">Prenom:</label>
-                <input type="text" id="" name="prenom"  value="<?= $personne['prenom'];?>" placeholder="Votre Prénom" required="required" class="form-control">
+                <input type="text" id="prenom" name="prenom"  value="<?= $personne['prenom'];?>" placeholder="Votre Prénom" required="required" class="form-control">
             </div>
             <div class="col-md-4">
                 <label for="sexe">Sexe:</label>

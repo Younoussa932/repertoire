@@ -3,14 +3,15 @@
     require 'connect.inc.php';
     if(isset($_POST["valide"])){
         $password = $_POST["password"];
-        $password = md5($password);
         $Cpassword = $_POST["Cpassword"];
-        $Cpassword = md5($Cpassword);
         $longueur_password = strlen($password);
         $message = null;
         $erreur = false;
         $droit = "visiteur";
         $etat = true;
+        $password = md5($password);
+        $Cpassword = md5($Cpassword);
+
         if(!empty($_POST["nom"])) {
             $nom = $_POST["nom"];
         }
@@ -52,10 +53,10 @@
             $erreur = true;
             // return null;
         }
-        if ($password != $Cpassword) {
+        if ( md5($password)!=  md5($Cpassword)) {
             $message ="Mots de passe différents";
             $erreur = true;
-            // return null;
+            return null;
         }
 
         if ($erreur == false){
@@ -76,7 +77,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
     <link rel="stylesheet" href="css/Style.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <title>Page d'inscription</title>
@@ -102,7 +103,7 @@
         }
     ?>
     <form action="" method="POST">
-        <div class="mt-4">
+        <div class="mt-3">
             <div class="row pt-5">
                 <div class="col-md-4">
                     <label for="nom">Nom:</label>
